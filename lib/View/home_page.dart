@@ -40,19 +40,7 @@ class _HomePageState extends State<HomePage> {
           'News',
         ),
         actions: [
-          InkWell(
-              onTap: () {
-                // PopupMenuButton(
-                //   initialValue: 'abc',
-                //   itemBuilder: (context ,)  {
-                //     PopupMenuItem(child: Text('Business'), value: 'business');
-                //     PopupMenuItem(child: Text('Business'), value: 'business');
-                //     PopupMenuItem(child: Text('Business'), value: 'business');
-                //     PopupMenuItem(child: Text('Business'), value: 'business');
-                //   },
-                // );
-              },
-              child: const Icon(Icons.more_vert)),
+          InkWell(onTap: () {}, child: const Icon(Icons.more_vert)),
         ],
       ),
       body: Column(
