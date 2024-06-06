@@ -15,7 +15,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'News App',
       theme: ThemeData.light().copyWith(
-          appBarTheme: const AppBarTheme(backgroundColor: Colors.blue)),
+          appBarTheme: const AppBarTheme(
+        titleTextStyle: TextStyle(fontSize: 18, color: Colors.black),
+        backgroundColor: Colors.blue,
+      )),
       home: const SplashScreen(),
     );
   }

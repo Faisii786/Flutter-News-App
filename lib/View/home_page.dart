@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:news_app/Model/headlines_model.dart';
 import 'package:news_app/View%20Model/view_news_repo.dart';
+import 'package:news_app/View/news_details.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,9 +31,23 @@ class _HomePageState extends State<HomePage> {
         ),
         title: const Text(
           'News',
-          style: TextStyle(fontSize: 18),
         ),
         centerTitle: true,
+        actions: [
+          InkWell(
+              onTap: () {
+                // PopupMenuButton(
+                //   initialValue: 'abc',
+                //   itemBuilder: (context ,)  {
+                //     PopupMenuItem(child: Text('Business'), value: 'business');
+                //     PopupMenuItem(child: Text('Business'), value: 'business');
+                //     PopupMenuItem(child: Text('Business'), value: 'business');
+                //     PopupMenuItem(child: Text('Business'), value: 'business');
+                //   },
+                // );
+              },
+              child: const Icon(Icons.more_vert)),
+        ],
       ),
       body: FutureBuilder<NewsHeadlinesModel>(
         future: newsViewModel.fetchNewsHeadlines(),
@@ -73,70 +89,81 @@ class _HomePageState extends State<HomePage> {
                           right: 0,
                           bottom: 0,
                           child: Center(
-                            child: Container(
-                              width: width * 0.55,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.8),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    article.title ?? 'No Title',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    article.description ?? 'No Description',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.02,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        article.source!.name ??
-                                            'No Description',
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
+                            child: InkWell(
+                              onTap: () {
+                                Get.to(() => NewsDetailedPage(
+                                      articles: article,
+                                    ));
+                              },
+                              child: Container(
+                                width: width * 0.55,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      article.title ?? 'No Title',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
                                       ),
-                                      Text(
-                                        "${dateTime.month.toString()}"
-                                        '/'
-                                        "${dateTime.day.toString()}"
-                                        '/'
-                                        "${dateTime.year.toString()}",
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      article.description ?? 'No Description',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
                                       ),
-                                    ],
-                                  )
-                                ],
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(
+                                      height: height * 0.02,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            article.source!.name ??
+                                                'No Description',
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                            ),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${dateTime.month.toString()}"
+                                            '/'
+                                            "${dateTime.day.toString()}"
+                                            '/'
+                                            "${dateTime.year.toString()}",
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
