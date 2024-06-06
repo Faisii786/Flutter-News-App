@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:news_app/View/splash_screen.dart';
 
 void main() {
@@ -15,8 +16,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'News App',
       theme: ThemeData.light().copyWith(
-          appBarTheme: const AppBarTheme(
-        titleTextStyle: TextStyle(fontSize: 18, color: Colors.black),
+          appBarTheme: AppBarTheme(
+        centerTitle: true,
+        titleTextStyle: GoogleFonts.poppins(fontSize: 16, color: Colors.black),
         backgroundColor: Colors.blue,
       )),
       home: const SplashScreen(),
