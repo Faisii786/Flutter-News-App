@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/Model/categories_news_model.dart';
 import 'package:news_app/Model/headlines_model.dart';
 import 'package:news_app/View%20Model/view_news_repo.dart';
 import 'package:news_app/View/category_screen.dart';
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   FilterList? selectedMenue;
 
   String newsName = 'bbc-news';
+
+  String generalNews = 'General';
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Positioned(
-                                top: 0,
+                                top: height * .2,
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
@@ -217,76 +220,98 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // fetch everything news
-          // Expanded(
-          //   child: FutureBuilder<EverythingNewsModel>(
-          //     future: newsViewModel.fetcheverythingNewsHeadlines(),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return const SpinKitFadingCircle(
-          //           color: Colors.blue,
-          //           size: 40.0,
-          //         );
-          //       } else if (snapshot.hasError) {
-          //         return const Center(
-          //           child: Text('An error occurred'),
-          //         );
-          //       } else {
-          //         if (snapshot.hasData) {
-          //           return ListView.builder(
-          //             scrollDirection: Axis.vertical,
-          //             itemCount: snapshot.data!.articles!.length,
-          //             itemBuilder: (context, index) {
-          //               final article = snapshot.data!.articles![index];
-          //               return Padding(
-          //                 padding: const EdgeInsets.symmetric(
-          //                     horizontal: 10, vertical: 10),
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.start,
-          //                   crossAxisAlignment: CrossAxisAlignment.start,
-          //                   children: [
-          //                     ClipRRect(
-          //                       borderRadius: BorderRadius.circular(10),
-          //                       child: CachedNetworkImage(
-          //                         imageUrl: article.urlToImage.toString(),
-          //                         fit: BoxFit.cover,
-          //                         width: width * 0.3,
-          //                         height: height * 0.13,
-          //                       ),
-          //                     ),
-          //                     Expanded(
-          //                       child: Padding(
-          //                         padding:
-          //                             const EdgeInsets.symmetric(horizontal: 8),
-          //                         child: Column(
-          //                           children: [
-          //                             Text(
-          //                               article.title ?? 'No Title',
-          //                               style: GoogleFonts.poppins(
-          //                                 color: Colors.black,
-          //                                 fontWeight: FontWeight.w500,
-          //                                 fontSize: 12,
-          //                               ),
-          //                               maxLines: 2,
-          //                               overflow: TextOverflow.ellipsis,
-          //                             ),
-          //                           ],
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               );
-          //             },
-          //           );
-          //         }
-          //       }
-          //       return const Center(
-          //         child: Text("No Data Available"),
-          //       );
-          //     },
-          //   ),
-          // ),
+          Container(
+            height: height * .3,
+            child: FutureBuilder<CatergoriesModel>(
+              future: newsViewModel.fetchcategoriesNewsHeadlines(generalNews),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: SpinKitFadingCircle(
+                      color: Colors.blue,
+                      size: 40.0,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('An error occurred'),
+                  );
+                } else {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data!.articles!.length,
+                      itemBuilder: (context, index) {
+                        final data = snapshot.data!.articles![index];
+                        DateTime.parse(data.publishedAt.toString());
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                  width: width * .4,
+                                  height: height * .17,
+                                  imageUrl: data.urlToImage.toString(),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        data.title.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13),
+                                      ),
+                                      Text(
+                                        data.content.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13),
+                                      ),
+                                      Text(
+                                        data.description.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13),
+                                      ),
+                                      Text(
+                                        data.source!.name.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: Text("No Data Available"),
+                    );
+                  }
+                }
+              },
+            ),
+          ),
         ],
       ),
     );
