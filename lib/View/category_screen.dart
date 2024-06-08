@@ -96,8 +96,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       itemCount: snapshot.data!.articles!.length,
                       itemBuilder: (context, index) {
                         final data = snapshot.data!.articles![index];
-                        DateTime dateTime =
-                            DateTime.parse(data.publishedAt.toString());
+                        DateTime.parse(data.publishedAt.toString());
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 5, vertical: 8),
