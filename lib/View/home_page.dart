@@ -15,8 +15,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+enum FilterList { bbcNews, buisnessNews, aljazeeraNews }
+
 class _HomePageState extends State<HomePage> {
   NewsViewModel newsViewModel = NewsViewModel();
+
+  FilterList? selectedMenue;
+
+  String newsName = 'bbc-news';
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           onPressed: () {
             Get.to(
-              () => const CategoriesOfNews(),
+              () => const CategoriesScreen(),
               transition: Transition.fadeIn,
             );
           },
@@ -40,7 +46,31 @@ class _HomePageState extends State<HomePage> {
           'News',
         ),
         actions: [
-          InkWell(onTap: () {}, child: const Icon(Icons.more_vert)),
+          PopupMenuButton(
+              onSelected: (FilterList item) {
+                if (FilterList.bbcNews.name == item.name) {
+                  newsName = 'bbc-news';
+                } else if (FilterList.buisnessNews.name == item.name) {
+                  newsName = 'business-insider';
+                } else if (FilterList.aljazeeraNews.name == item.name) {
+                  newsName = 'al-jazeera-english';
+                }
+
+                setState(() {
+                  selectedMenue = item;
+                });
+              },
+              initialValue: selectedMenue,
+              itemBuilder: (context) => <PopupMenuEntry<FilterList>>[
+                    const PopupMenuItem<FilterList>(
+                        value: FilterList.bbcNews, child: Text("BBC News")),
+                    const PopupMenuItem<FilterList>(
+                        value: FilterList.buisnessNews,
+                        child: Text("Business News")),
+                    const PopupMenuItem<FilterList>(
+                        value: FilterList.aljazeeraNews,
+                        child: Text("Al Jazeera News")),
+                  ]),
         ],
       ),
       body: Column(
@@ -48,7 +78,7 @@ class _HomePageState extends State<HomePage> {
           // fetch bbc news
           Expanded(
             child: FutureBuilder<NewsHeadlinesModel>(
-              future: newsViewModel.fetchNewsHeadlines(),
+              future: newsViewModel.fetchNewsHeadlines(newsName),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SpinKitFadingCircle(
@@ -77,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                                 child: CachedNetworkImage(
                                   imageUrl: article.urlToImage.toString(),
                                   fit: BoxFit.cover,
-                                  width: width * 0.6,
+                                  width: width * 0.75,
                                   height: height * 0.6,
                                 ),
                               ),
@@ -97,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                                       );
                                     },
                                     child: Container(
-                                      width: width * 0.55,
+                                      width: width * 0.7,
                                       decoration: BoxDecoration(
                                         color: Colors.white.withOpacity(0.8),
                                         borderRadius: BorderRadius.circular(10),
